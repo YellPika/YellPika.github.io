@@ -1,3 +1,4 @@
-name: Your New Jekyll Site
+name: "Giant Flying Lambdas!"
+description: "Design and exploration of programming languages, among other things..."
 markdown: redcarpet
 pygments: true
