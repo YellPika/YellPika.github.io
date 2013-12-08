@@ -3,7 +3,7 @@
 
 body { 
     background-color: whitesmoke;
-    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 a { 
@@ -60,7 +60,7 @@ ol { list-style: inside decimal; }
 .banneritem:hover { color: white; }
 
 .content {
-    padding: 50px 7.5%;
+    padding: 50px 10%;
 }
 
 .footer {
