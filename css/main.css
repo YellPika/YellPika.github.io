@@ -67,8 +67,20 @@ ol { list-style: inside decimal; }
     font-size: x-small;
 }
 
+.postlisting {
+    background-color: snow;
+    border: 2px solid lightgray;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.categorylist {
+    font-size: small;
+}
+
 @media (min-width: 1000px) {
     .banner {
+        border-bottom: none;
         border-right: 10px solid gray;
 
         position: fixed;
