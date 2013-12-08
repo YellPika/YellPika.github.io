@@ -46,11 +46,11 @@ What happens if we want to make use of a resource from the surrounding scope? We
 need some way to import resources:
 
 {% highlight haskell %}
-acquire :: Handle s' -> RegionT s m (Handle s)
-acquire resource = ...
+capture :: Handle s' -> RegionT s m (Handle s)
+capture resource = ...
 {% endhighlight %}
 
-Conceptually, `acquire` will increment the reference count for `resource`, and
+Conceptually, `capture` will increment the reference count for `resource`, and
 then decrement it when the surrounding scope terminates. We can define a
 similar function for escaping scopes:
 
@@ -88,7 +88,7 @@ newHandle :: m () -> RegionT p c m (Handle p c)
 -- for reasons which will be revealed soon...
 useHandle :: Handle p' c -> RegionT p c m ()
 
-acquire :: Handle p' p -> RegionT p c m (Handle p c)
+capture :: Handle p' p -> RegionT p c m (Handle p c)
 release :: Handle p c -> RegionT p c m (Handle p' p)
 {% endhighlight %}
 
@@ -134,7 +134,7 @@ data Handle p c = ...
 newHandle :: m () -> RegionT p c m (Handle p c)
 useHandle :: Handle p' c -> RegionT p c m ()
 
-acquire :: Handle p' p -> RegionT p c m (Handle p c)
+capture :: Handle p' p -> RegionT p c m (Handle p c)
 release :: Handle p c -> RegionT p c m (Handle p' p)
 {% endhighlight %}
 
