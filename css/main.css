@@ -1,133 +1,90 @@
 @import url(code.css);
 @import url(reset.css);
 
-a {
-    text-decoration: none;
-    color: darkblue;
-}
-
-a:hover {
-    color: black;
-}
-
-body {
+body { 
     background-color: whitesmoke;
-    font-family:  "Open Sans", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 
-code, pre {
-    font-family: "Lucida Console", Monaco, monospace;
-    font-size: 13.25px;
+a { 
+    color: darkblue;
+    text-decoration: none
 }
 
-h1, h2, h3, h4 {
-    color: #1b1921;
-    margin-bottom: 15px;
-}
-
-em {
-    font-style: italic;
-}
-
-h1 {
-    font-size: 44px;
-    margin-top: 32px;
-}
-
-h2 {
-    font-size: 32px;
-    margin-top: 24px;
-}
-
-h3 {
-    font-size: 24px;
-    margin-top: 20px;
-}
-
-h4 {
-    font-size: 20px;
-    margin-top: 18px;
-}
+a:hover { color: black }
 
 p {
-    margin: 0 0 10px;
-}
-
-ul, ol {
-    margin-left: 30px;
-    margin-bottom: 10px;
-}
-
-ul {
-    list-style: inside square;
-}
-
-ol {
-    list-style: inside decimal;
-}
-
-.info {
-    background-color: #1b1921;
-
-    position: absolute;
-    left: 0;
-    top: 0;
-
-    width: 100%;
-    height: 200px;
-
-    border-bottom: 10px solid gray;
-}
-
-.container {
-    position: absolute;
-    left: 0;
-    top: 210px;
-    right: 0;
-
-    padding: 50px 7.5%;
+    margin: 0 0 15px;
     text-align: justify;
 }
 
-.title {
-    color: white;
-    margin: 25px;
+ul, ol { margin: 0px 15px 15px; }
+
+h1, h2, h3, h4, h5, h6 {
+    color: #181821;
+    margin: 30px 0 15px;
 }
 
-.subtitle {
-    color: white;
-    margin: 25px;
-}
+h1 { font-size: 48px; }
+h2 { font-size: 32px; }
+h3 { font-size: 24px; }
+h4 { font-size: 20px; }
+h5 { font-size: 18px; }
+h6 { font-size: 16px; }
+
+em { font-style: italic }
+
+ul { list-style: inside disc; }
+ol { list-style: inside decimal; }
 
 .highlight {
-    padding: 10px;
-    margin: 15px 0;
     border: 2px solid lightgray;
+    margin: 15px;
+    padding: 15px;
 }
 
-.posts {
-    list-style: none;
+.white { color: white; }
+
+.banner {
+    background-color: #181821;
+    padding: 20px;
+    border-bottom: 10px solid gray;
 }
 
-.main {
-    width: 100%;
+.banneritem {
+    margin: 10px 25px;
+    color: skyblue;
+    display: inline-block;
+}
+
+.banneritem:hover { color: white; }
+
+.content {
+    padding: 50px 7.5%;
+}
+
+.footer {
+    font-size: x-small;
 }
 
 @media (min-width: 1000px) {
-    .info {
+    .banner {
+        border-right: 10px solid gray;
+
         position: fixed;
         left: 0;
         top: 0;
         bottom: 0;
 
-        width: 300px;
-        height: 100%;
-
-        border-right: 10px solid dimgray;
+        width: 250px;
     }
 
-    .container {
-        top: 0;
-        left: 310px;
+    .banneritem {
+        margin: 10px 15px;
+    }
+
+    .content {
+        position: absolute;
+        left: 260px;
     }
 }

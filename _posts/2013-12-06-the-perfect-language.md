@@ -1,7 +1,6 @@
 ---
 layout: post
-title:  "The Perfect Language"
-categories: home
+title: "The Perfect Language"
 published: false
 ---
 
