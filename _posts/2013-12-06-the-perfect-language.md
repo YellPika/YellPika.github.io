@@ -57,7 +57,7 @@ This leaves the object-oriented and functional paradigms. I noticed a while back
 that constructs from either can be expressed in the other. For example, consider
 a predicate function, `a -> Bool`. We can express this with an interface:
 
-{% highlight csharp %}
+{% highlight csharp linenos %}
 public interface IPredicate<T> {
     public bool Invoke(T arg);
 }
@@ -78,7 +78,7 @@ public struct GreaterThan : IPredicate<int> {
 This is unnecessarily verbose. In contrast, an interface can be easily expressed
 with records.
 
-{% highlight haskell %}
+{% highlight haskell linenos %}
 data Connection = Connector {
     send :: Data -> IO (),
     recv :: IO Data

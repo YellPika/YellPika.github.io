@@ -6,6 +6,11 @@ body {
     font-family: Arial, sans-serif;
 }
 
+code, pre {
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 14px;
+}
+
 a { 
     color: darkblue;
     text-decoration: none
@@ -37,10 +42,19 @@ em { font-style: italic }
 ul { list-style: inside disc; }
 ol { list-style: inside decimal; }
 
+blockquote {
+    background-color: beige;
+    padding: 0 0 0 20px;
+    margin: 15px 30px 15px 0;
+    border-left: 5px solid maroon;
+}
+
 .highlight {
     border: 2px solid lightgray;
+    border-radius: 5px;
     margin: 15px;
     padding: 15px;
+    overflow: auto;
 }
 
 .white { color: white; }
@@ -70,6 +84,7 @@ ol { list-style: inside decimal; }
 .postlisting {
     background-color: snow;
     border: 2px solid lightgray;
+    border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
 }
@@ -97,7 +112,7 @@ ol { list-style: inside decimal; }
 
     .content {
         position: absolute;
-        left: 280px;
+        left: 270px;
         right: 0;
     }
 }

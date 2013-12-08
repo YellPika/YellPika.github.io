@@ -40,11 +40,11 @@ satisfy my tastes?
 Easy. Make my own language. Of course, the "easy" part is identifying the
 solution. _Implementing_ the solution is much harder. I'm sure you're tired of
 me rambling on, and perhaps even have objections to my rather half-assed
-criticism of your favourite language above. How about we let bygones be bygones
+criticism of your favorite language above. How about we let bygones be bygones
 and move on to the meat of this post?
 
 Priorities
-==========
+----------
 
 What makes a programming language _good_? To answer that, we first need to
 identify what a programming language is _for_. We all know what it is:
