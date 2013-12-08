@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Perfect Language: Priorities"
-categories: [language design]
+categories: [language design, programming]
 published: true
 ---
 
