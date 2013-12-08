@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Perfect Language: Priorities"
-categories: ["language design"]
+categories: [language design]
 published: true
 ---
 
@@ -59,12 +59,11 @@ So what makes a piece of software good? To me, good software is,
 
 The order here is not arbitrary. Software is useless if it's not reliable. If
 a piece of software is not maintainable, it becomes difficult to ensure it's
-correctness. Only once the first two requirements are satisfied should we worry
-about performance. After all, it's usually much easier to optimize software than
-it is to debug it.
-
-The obvious exception to this order is when performance is so bad that the
-program is no longer usable. "Fast" becomes higher priority than "Maintainable".
+correctness. We should only worry about performance after the first two
+requirements are satisfied. After all, it's usually much easier to optimize
+software than it is to debug it. The obvious exception to this order is when
+performance is so bad that the program is no longer usable. "Fast" becomes
+higher priority than "Maintainable".
 
 Given these requirements, it follows that a programming language should be
 designed to aid the programmer in achieving these requirements.
@@ -84,29 +83,31 @@ Functional languages (that are not LISP or APL) and Python tend to fit these
 descriptions the best.
 
 A language should allow the programmer to drop down to a lower level in order to
-write more efficient code. However, such blocks should be clearly marked. The
-designers of C# were in the right when they added `unsafe` code to C#.
+write more efficient code. This is common practice in a number of languages.
+C and C++ have inline assembly, C# has `unsafe` blocks, and Haskell
+(specifically GHC) has primops. Each feature is walled off from the rest of the
+language, which preserves the conceptual consistency of the language's design.
 
 A somewhat under-appreciated aspect of language design is the core libraries.
 Haskell and C++ suffer greatly from this. C++'s standard template library is
 embarrassingly small. Haskell's are a little better, but they suffer from
-annoying inconsistencies (`fmap` vs `map`), and poor design due to historical
-accident (the `Functor`/`Applicative`/`Monad` issue). A language that does not
-have polished, standardized libraries will always lose to one that does. JVM
-and .NET languages are superior in that regard.
+annoying inconsistencies (`fmap` vs `map`, `Prelude.id` vs
+`Control.Category.id`, `Functor`/`Applicative`/`Monad`, etc.). A language that
+does not have polished, standardized libraries will eventually lose to one that
+does. JVM and .NET languages are superior in this regard.
 
 A language without proper libraries will cause software to suffer in all
 respects. Consider a language that does not come with a sorting function.
 Developers will be forced, after they get over their disbelief, to write their
 own, likely suboptimal, replacement. They might write it over and over again,
-since they have no standard place to put such basic utilities.
+since they have no standard place to put such a basic utility.
 
 Much of this should be old news, although some hardcore performance enthusiasts
 never seem to get the point (we're not all writing real-time applications!). I
 don't consider high level languages as a crutch for incompetent programmers to
 lean on. I consider them _support_. They are foundations on which competent
-programmers can attain even loftier goals.
+programmers can manage increasingly complicated designs.
 
 What I've done here is set some ground rules. I expect every design decision I
 make to relate to what I've written here, in some way or another. The next
-few posts will discuss type systems, syntax, and libraries.
+few posts will discuss paradigms, type systems, syntax, and libraries.
