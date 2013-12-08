@@ -22,7 +22,7 @@ comments: false
     {% endfor %}
 {% endfor %}
 
-{% assign categories = categories | split: "|" %}
+{% assign categories = categories | split: "|" | sort %}
 
 {% for category in categories %}
     {% assign words = category | split: " " %}
