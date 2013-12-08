@@ -29,8 +29,8 @@ Haskell.
 There are flaws in every language. The .NET and JVM languages suffer from
 inexpressive type systems. Haskell's core libraries are showing signs of age
 (tends to happen in an area of heavy research). Python suffers from a global
-interpreter lock (is this being fixed?), significant whitespace is not
-optional (Haskell you genius), and there's nothing in the language quite as
+interpreter lock (is this being fixed?), has significant whitespace that is not
+optional (Haskell you genius), and has no control constructs that are quite as
 powerful as call/cc. LISP's braces still bug me, and Prolog is... still slow.
 
 As you can see, the subjectivity of my criticisms increases as I go on. No
@@ -80,8 +80,8 @@ although not so terse that it becomes unreadable. This means:
 * No redundant brackets, braces, or parentheses
 * No Unicode operators
 
-Functional languages (that are not LISP or APL) tend to fit these descriptions
-the best.
+Functional languages (that are not LISP or APL) and Python tend to fit these
+descriptions the best.
 
 A language should allow the programmer to drop down to a lower level in order to
 write more efficient code. However, such blocks should be clearly marked. The
