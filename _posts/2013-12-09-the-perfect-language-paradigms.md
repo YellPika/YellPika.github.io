@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Perfect Language: Priorities"
+title: "The Perfect Language: Paradigms"
 categories: [language design]
 published: true
 ---
@@ -9,105 +9,105 @@ This post is part of what will be a series of posts where I discuss language
 design. Each post can be considered to be a work in progress, and will be
 updated from time to time.
 
-I once thought C# was a great language. I was so immersed in it that I came to
-disregard all other languages. Python isn't statically typed? C++ doesn't have
-automatic memory management? Bah.
+A paradigm is a way of thinking. Object-oriented programmers tend to think in
+terms of communicating entities, functional programmers tend to think in terms
+of sequences of transformations, and logic programmers tend to think in terms of
+definitions and descriptions. I say "tend to", because it's perfectly possible
+to emulate other styles of programming in each paradigm. I recently embedded
+[typed logical programming][tlogic] in Haskell. An abstract interface can be
+emulated with a record of functions. The [command pattern][command] is
+essentially a bloated closure. This is my primary gripe with (mainstream) object
+oriented languages. Objects are a swiss army chainsaw, a monolithic concept. You
+can implement anything with them, but the result will often be overly verbose.
 
-A few years back, I went about designing a mathematics library for games. I
-implemented the typical structures: vectors, matrices, quaternions... (I still
-don't fully understand how the last one works). However, there were two very
-annoying problems: how to parametrize the structures by their element types, and
-how to parametrize the structures by the number of elements. The first I could
-solve with some sneaky intermediate language hacks. The second proved much more
-difficult.
+How about the reverse? Let's try to emulate objects in a functional language.
+Consider the following, somewhat contrived, C# code:
 
-For the first time, my head hit the ceiling; I discovered that C# had limits to
-what it could express. This spurred my development as a programmer. Since then
-I've learned nearly a dozen new languages, including Python, C++, Prolog, and
-Haskell.
+{% highlight csharp linenos %}
+public interface IConnection {
+    int Read(byte[] bytes, int offset, int count);
+    void Write(byte[] bytes, int offset, int count);
+}
 
-There are flaws in every language. The .NET and JVM languages suffer from
-inexpressive type systems. Haskell's core libraries are showing signs of age
-(tends to happen in an area of heavy research). Python suffers from a global
-interpreter lock (is this being fixed?), has significant whitespace that is not
-optional (Haskell you genius), and has no control constructs that are quite as
-powerful as call/cc. LISP's braces still bug me, and Prolog is... still slow.
+public class TcpConnection : IConnection {
+    public TcpConnection(string address) { ... }
+    public virtual int Read(byte[] bytes, int offset, int count) { ... }
+    public virtual void Write(byte[] bytes, int offset, int count) { ... }
+}
 
-As you can see, the subjectivity of my criticisms increases as I go on. No
-language seems to offer exactly what I want. How exactly am I supposed to
-satisfy my tastes?
+public class SslConnection : TcpConnection {
+    public SslConnection(string address)
+        : base(address) {
+        ...
+    }
 
-Easy. Make my own language. Of course, the "easy" part is identifying the
-solution. _Implementing_ the solution is much harder. I'm sure you're tired of
-me rambling on, and perhaps even have objections to my rather half-assed
-criticism of your favorite language above. How about we let bygones be bygones
-and move on to the meat of this post?
+    public int Read(byte[] bytes, int offset, int count) { ... base ... }
+    public void Write(byte[] bytes, int offset, int count) { ... base ... }
+}
+{% endhighlight %}
 
-Priorities
-----------
+This example is a rather stupid one. `SslConnection` would be better implemented
+with composition, but I wanted to throw in inheritance for the sake of the
+argument. Now for Haskell:
 
-What makes a programming language _good_? To answer that, we first need to
-identify what a programming language is _for_. We all know what it is:
-creating software. At least, that's what _I_ plan on using it for. Those of you
-that are into theorem proving should probably look elsewhere.
+{% highlight haskell linenos %}
+data Connection = Connection {
+    read :: String -> Int -> Int -> IO Int
+    write :: String -> Int -> Int -> IO ()
+}
 
-So what makes a piece of software good? To me, good software is,
+newTcpConnection :: String -> IO Connection
+newTcpConnection address = do
+    ...
+    return $ Connection {
+        read = ...
+        write = ...
+    }
 
-* Reliable
-* Maintainable
-* Fast
+newSslConnection :: String -> IO Connection
+newSslConnection address = do
+    base <- newTcpConnection address
+    return $ Connection {
+        read = ... base ...
+        write = ... base ...
+    }
+{% endhighlight %}
 
-The order here is not arbitrary. Software is useless if it's not reliable. If
-a piece of software is not maintainable, it becomes difficult to ensure it's
-correctness. We should only worry about performance after the first two
-requirements are satisfied. After all, it's usually much easier to optimize
-software than it is to debug it. The obvious exception to this order is when
-performance is so bad that the program is no longer usable. "Fast" becomes
-higher priority than "Maintainable".
+This example is lacking features. Once we've created a connection, we have no
+way to identify what kind of connection it is. I consider this possibility a
+_good thing_. While it's entirely possible to implement the missing parts, this
+particular implementation is simple and concise. Don't need runtime types? No
+problem.
 
-Given these requirements, it follows that a programming language should be
-designed to aid the programmer in achieving these requirements.
+Objects (a la C++ and Java) are not a general concept; they are a unification of
+multiple smaller concepts. Is this actually a bad thing? There are languages
+like Scala, which throw in everything and the kitchen sink. Then there are
+languages like Scheme, which consist of an extremely limited set of fundamental
+primitives, and build everything on top of them. Which approach leads to better
+software?
 
-A strong, expressive type system is a boon in all three aspects. Unlike unit
-tests, type systems don't reduce certain types of errors: they _eliminate_ them.
-They also serve as documentation, and allow the compiler to make various
-optimizations.
+There's a reason Scheme is used for teaching: it's simple as hell. Larger
+structures can be built on top of smaller ones. However, this approach has its
+own kinds of problems. How should programmers recognize these larger structures?
+Surely something like Scala would be better, as every language feature is
+documented, and has clear uses?
 
-Generally, the less code implies less bugs. A language should have terse syntax,
-although not so terse that it becomes unreadable. This means:
+Actually, that's a terrible argument. In the end, it boils down to learning
+idioms. The singleton is a design pattern - an idiom unique to object oriented
+programming. Baking it into the language doesn't make the concept easier or
+harder to learn. So what are the differences between idioms that are baked into
+the language, and idioms that are created within a language? I see no meaningful
+difference, so both approaches are valid... in the hands of experts. There _is_
+a difference, it that difference becomes apparent when teaching languages to
+newcomers. I highly doubt that any school will decide to teach Scala to their
+first year students.
 
-* No redundant brackets, braces, or parentheses
-* No Unicode operators
+If two programs are written with equal skill, then the more maintainable one is
+the program written in the language with more users. Therefore, a language
+should be simple enough for beginners to pick up, but powerful enough for an
+expert to exercise his full abilities. These languages are invariably
+functional. Or Python.
 
-Functional languages (that are not LISP or APL) and Python tend to fit these
-descriptions the best.
-
-A language should allow the programmer to drop down to a lower level in order to
-write more efficient code. This is common practice in a number of languages.
-C and C++ have inline assembly, C# has `unsafe` blocks, and Haskell
-(specifically GHC) has primops. Each feature is walled off from the rest of the
-language, which preserves the conceptual consistency of the language's design.
-
-A somewhat under-appreciated aspect of language design is the core libraries.
-Haskell and C++ suffer greatly from this. C++'s standard template library is
-embarrassingly small. Haskell's are a little better, but they suffer from
-annoying inconsistencies (`fmap` vs `map`, `Prelude.id` vs
-`Control.Category.id`, `Functor`/`Applicative`/`Monad`, etc.). A language that
-does not have polished, standardized libraries will eventually lose to one that
-does. JVM and .NET languages are superior in this regard.
-
-A language without proper libraries will cause software to suffer in all
-respects. Consider a language that does not come with a sorting function.
-Developers will be forced, after they get over their disbelief, to write their
-own, likely suboptimal, replacement. They might write it over and over again,
-since they have no standard place to put such a basic utility.
-
-Much of this should be old news, although some hardcore performance enthusiasts
-never seem to get the point (we're not all writing real-time applications!). I
-don't consider high level languages as a crutch for incompetent programmers to
-lean on. I consider them _support_. They are foundations on which competent
-programmers can manage increasingly complicated designs.
-
-What I've done here is set some ground rules. I expect every design decision I
-make to relate to what I've written here, in some way or another. The next
-few posts will discuss paradigms, type systems, syntax, and libraries.
+[tlogic]: https://github.com/YellPika/tlogic
+[command]: http://en.wikipedia.org/wiki/Command_pattern
+[aa]: http://en.wikipedia.org/wiki/Associative_array
