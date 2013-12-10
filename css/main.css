@@ -78,8 +78,15 @@ blockquote {
     padding: 50px 10%;
 }
 
+.header {
+    border-bottom: 2px solid lightgray;
+    padding-bottom: 10px;
+}
+
 .footer {
     font-size: x-small;
+    border-top: 2px solid lightgray;
+    padding-top: 10px;
 }
 
 .postlisting {
