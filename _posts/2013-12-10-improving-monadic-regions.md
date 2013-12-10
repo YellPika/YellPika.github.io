@@ -37,8 +37,8 @@ useHandle res = if refCount res < 0 then error "..." else return ()
 So far so good. How about child scopes?
 
 {% highlight haskell %}
--- Any resources allocated in the parameter region will be released when the
--- region exits.
+-- Any resources allocated in the region parameter will
+-- automatically be released when the region exits.
 scope :: (forall s. RegionT s m a) -> RegionT s' m a
 scope region = ...
 {% endhighlight %}
@@ -90,7 +90,7 @@ newHandle :: m () -> RegionT p c m (Handle p c)
 useHandle :: Handle p' c -> RegionT p c m ()
 
 capture :: Handle p' p -> RegionT p c m (Handle p c)
-release :: Handle p c -> RegionT p c m (Handle p' p)
+escape :: Handle p c -> RegionT p c m (Handle p' p)
 {% endhighlight %}
 
 This formulation is already quite different from the existing implementation.
@@ -105,7 +105,7 @@ reset transform region = ...
 
 `reset` takes a region computation, unwraps it and then passes it to
 `transform`. It retains the context of the parent scope. This implies that
-resources from the parent scope are _automatically acquired_. Reference counts
+resources from the parent scope are _automatically captured_. Reference counts
 are incremented _before_ the computation is passed to `transform`, so things
 like this become perfectly safe:
 
@@ -136,7 +136,7 @@ newHandle :: m () -> RegionT p c m (Handle p c)
 useHandle :: Handle p' c -> RegionT p c m ()
 
 capture :: Handle p' p -> RegionT p c m (Handle p c)
-release :: Handle p c -> RegionT p c m (Handle p' p)
+escape :: Handle p c -> RegionT p c m (Handle p' p)
 {% endhighlight %}
 
 [reg]: http://hackage.haskell.org/package/regions
