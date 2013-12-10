@@ -97,17 +97,14 @@ Actually, that's a terrible argument. In the end, it boils down to learning
 idioms. The singleton is a design pattern - an idiom unique to object oriented
 programming. Baking it into the language doesn't make the concept easier or
 harder to learn. So what are the differences between idioms that are baked into
-the language, and idioms that are created within a language? I see no meaningful
-difference, so both approaches are valid... in the hands of experts. There _is_
-a difference, it that difference becomes apparent when teaching languages to
-newcomers. I highly doubt that any school will decide to teach Scala to their
-first year students.
+the language, and idioms that are created within a language? When you think
+about it, there's not much. Or is there?
 
 If two programs are written with equal skill, then the more maintainable one is
-the program written in the language with more users. Therefore, a language
-should be simple enough for beginners to pick up, but powerful enough for an
-expert to exercise his full abilities. These languages are invariably
-functional. Or Python.
+the program written in the language with more users. A language that is harder
+to learn will attract less users. Therefore, a language should be simple enough
+for beginners to pick up, but powerful enough for an expert to exercise his full
+abilities.
 
 [tlogic]: https://github.com/YellPika/tlogic
 [command]: http://en.wikipedia.org/wiki/Command_pattern
