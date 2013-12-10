@@ -106,9 +106,9 @@ reset transform region = ...
 
 `reset` takes a region computation, unwraps it and then passes it to
 `transform`. It retains the context of the parent scope. This implies that
-resources from the parent scope are _automatically captured_. Reference counts
-are incremented _before_ the computation is passed to `transform`, so things
-like this become perfectly safe:
+resources from the parent scope are _automatically captured_. If we increment
+the reference counts of the captured resources _before_ the computation is
+passed to `transform`, things like this become perfectly safe:
 
 {% highlight haskell %}
 runRegionT $ do
