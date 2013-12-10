@@ -31,7 +31,7 @@ newHandle :: m () -> RegionT s m (Handle s)
 newHandle action = ...
 
 useHandle :: Handle s -> RegionT s m ()
-useHandle res = if refCount res < 0 then error "..." else return ()
+useHandle res = if refCount res <= 0 then error "..." else return ()
 {% endhighlight %}
 
 So far so good. How about child scopes?
