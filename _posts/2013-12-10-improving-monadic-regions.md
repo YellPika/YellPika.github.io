@@ -124,7 +124,7 @@ runRegionT $ do
 {% endhighlight %}
 
 And that's it! The actual implementation of this scheme can get a little hairy
-at times, so I'll detail that in a later post.
+at times (think nested generators), so I'll describe that in a later post.
 
 The Whole API
 -------------
@@ -134,7 +134,7 @@ data RegionT p c m a = ...
 
 runRegionT :: (forall p c. RegionT p c m a) -> m a
 scope :: (forall c. RegionT p c m a) -> RegionT p' p m a
-reset :: (forall p. RegionT p c m a) -> RegionT p' c m a
+reset :: (m a -> m b) -> (forall p. RegionT p c m a) -> RegionT p' c m b
 
 data Handle p c = ...
 
