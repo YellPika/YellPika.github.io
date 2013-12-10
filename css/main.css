@@ -43,13 +43,14 @@ ul { list-style: inside disc; }
 ol { list-style: inside decimal; }
 
 blockquote {
-    background-color: beige;
+    background-color: snow;
     padding: 0 0 0 20px;
     margin: 15px 30px 15px 0;
     border-left: 5px solid maroon;
 }
 
 .highlight {
+    background-color: snow;
     border: 2px solid lightgray;
     border-radius: 5px;
     margin: 15px;
