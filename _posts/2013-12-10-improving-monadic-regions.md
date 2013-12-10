@@ -61,10 +61,9 @@ escape resource = ...
 {% endhighlight %}
 
 `escape` also increments the reference count for `resource`, but it will be
-decremented when the parent scope exits instead. There's a small problem with
-this: what if we have multiple nested scopes? Which scope does it escape to?
-How do we ensure that the reference count is decremented when the correct scope
-exits?
+decremented when the parent scope exits instead. But what if we have multiple
+nested scopes? Which scope does it escape to? How do we ensure that the
+reference count is decremented when the correct scope exits?
 
 Allowing resources to escape through arbitrarily nested scopes would require
 type level lists, and therefore `UndecidableInstances` to search them. Let's
