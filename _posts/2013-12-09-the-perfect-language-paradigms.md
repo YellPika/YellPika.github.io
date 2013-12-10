@@ -73,11 +73,12 @@ newSslConnection address = do
     }
 {% endhighlight %}
 
-This example is lacking features. Once we've created a connection, we have no
-way to identify what kind of connection it is. I consider this possibility a
-_good thing_. While it's entirely possible to implement the missing parts, this
-particular implementation is simple and concise. Don't need runtime types? No
-problem.
+This example has a small problem: once we've created a connection, we have no
+way to identify what kind of connection it is. I think this indicates an
+advantage. While it's entirely possible to implement the missing parts, this
+particular implementation is simple, concise, and doesn't implement unnecessary
+features. What if you don't _want_ to be able to identify the type of the
+connection? No problem.
 
 Objects (a la C++ and Java) are not a general concept; they are a unification of
 multiple smaller concepts. Is this actually a bad thing? There are languages
