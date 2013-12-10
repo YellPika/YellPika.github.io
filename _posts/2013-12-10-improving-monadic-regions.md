@@ -9,9 +9,9 @@ published: true
 from what I think is a major flaw: you can't pass resources to a new thread. I'm
 going to rectify that.
 
-Let's rework the semantics from scratch. What we want is a `Monad` that ensures
-that resources can't escape their scope. To achieve this, we utilize
-`RankNTypes`, and a phantom parameter:
+Let's rework the API from scratch. What we want is a `Monad` that ensures that
+resources can't escape their scope. To achieve this, we utilize `RankNTypes`,
+and a phantom parameter:
 
 {% highlight haskell %}
 -- s is the scope variable
