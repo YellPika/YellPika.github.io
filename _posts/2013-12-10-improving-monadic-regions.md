@@ -115,6 +115,11 @@ runRegionT $ do
     reset forkIO $ do
         threadDelay aReallyLongTime
         useHandle handle
+
+    useHandle handle
+
+    -- Root region exits before reset region does, but handle
+    -- isn't released until the forked region exits.
 {% endhighlight %}
 
 And that's it! The actual implementation of this scheme can get a little hairy
