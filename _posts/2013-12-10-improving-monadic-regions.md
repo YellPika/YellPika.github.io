@@ -2,6 +2,7 @@
 layout: post
 title: "Improving Monadic Regions"
 categories: [haskell, programming, regions]
+published: true
 ---
 
 [Monadic regions][reg] are a great idea, but the current implementation suffers
