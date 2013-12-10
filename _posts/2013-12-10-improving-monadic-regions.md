@@ -67,7 +67,7 @@ reference count is decremented when the correct scope exits?
 
 Allowing resources to escape through arbitrarily nested scopes would require
 type level lists, and therefore `UndecidableInstances` to search them. Let's
-restrict `escape` to only allow escaping up one level of scope.
+restrict `capture` and `escape` to only work over one level of scope.
 
 We redefine everything as follows:
 
