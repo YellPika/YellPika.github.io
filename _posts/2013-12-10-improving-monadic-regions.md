@@ -67,7 +67,9 @@ reference count is decremented when the correct scope exits?
 
 Allowing resources to escape through arbitrarily nested scopes would require
 type level lists, and therefore `UndecidableInstances` to search them. Let's
-restrict `capture` and `escape` to only work over one level of scope.
+restrict `capture` and `escape` to only work over one level of scope. To do
+this, we need to add another phantom type parameter to indicate the parent
+scope.
 
 We redefine everything as follows:
 
