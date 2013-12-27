@@ -6,7 +6,7 @@ categories: [haskell, programming, typeclasses]
 
 In this post I'm going to implement first class instances for typeclasses. Yes, it's [already been done][hsfci], but I find that particular approach problematic for two reasons:
 
-1. Every alternative instance has to deal with the `Proxy` type. This isn't so much of a problem for classes with simple functions (like `show`), but the extra casts get annoying pretty quickly when you have to deal with more involved functions, such as `>>=`.
+1. Every alternative instance has to deal with the `Proxy` type. This isn't so much of a problem for classes with simple functions (like `show`), but the extra casts get annoying pretty quickly when you have to deal with more complicated functions, such as `>>=`.
 
 2. The solution doesn't generalize that well. You have to create a new `ProxyN` newtype for every type kind (i.e. `Proxy` for kind `*`, `Proxy1` for kind `* -> *`). The `PolyKinds` extension doesn't seem to be enough to alleviate the issue.
 
@@ -23,10 +23,11 @@ First of all, I'm going to be making use of these imports and extensions:
     FlexibleContexts,
     FlexibleInstances,
     NoImplicitPrelude,
+    PolyKinds,
     RankNTypes,
     RebindableSyntax,
     TypeFamilies,
-    TypeSignatures
+    UndecidableInstances
   #-}
 
 import Data.IORef (IORef, newIORef, readIORef, writeIORef)
@@ -238,121 +239,59 @@ writeRef = _writeRef inst
 Quantified Contexts
 -------------------
 
-With our new method of declaring type classes, we now have the ability to express [quantified contexts][qc]!
-
-...
-
-Just kidding!
-
-...
-
-Well, sorta. Let's have a crack at it, shall we? We'll try to generalize `Monoid`/`MonadPlus`/`ArrowPlus`:
+With our new method of declaring type classes, we now have the ability to express [quantified contexts][qc]! First, we'll define a new type `Q` (for quantify):
 
 {% highlight haskell %}
-type Monoid m = Class (Monoid' m)
+-- c is the class we're implementing
+-- t is the type being quantified
+newtype Q c t = Q { unQ :: forall a. c (t a) }
+{% endhighlight %}
 
-data Monoid' m = Monoid' {
-    _empty :: m,
-    _append :: m -> m -> m
-}
+`Q` allows us to declare things like this:
 
-empty :: Monoid m => m
+{% highlight haskell %}
+type Empty' t = Empty' { _empty :: t }
+
+instance Class (Q Empty' []) where
+    inst = Q (Empty' { _empty = [] })
+
+empty :: Class (Semigroup' t) => t
 empty = _empty inst
 
-append :: Monoid m => m -> m -> m
-append = _append inst
+empty2 :: Class (Q Semigroup' t) => (t a, t b)
+empty2 = (_empty (unQ inst), _empty (unQ inst))
 {% endhighlight %}
 
-Alas, the following doesn't compile:
+Think of `c` like a continuation. By stacking `Q`s, we can achieve an arbitrary level of quantification:
 
 {% highlight haskell %}
-twoEmpty :: Class (forall a. Monoid (m a)) => (m b, m c)
-twoEmpty = (_empty inst, _empty inst)
+higherEmpty :: Class (Q (Q Semigroup') t) => (t a b, t b a)
+higherEmpty = (_empty (unQ (unQ inst)), _empty (unQ (unQ inst)))
 {% endhighlight %}
 
-Let's try this:
+Typing `unQ inst` everywhere is a chore. We can alleviate this problem by declaring another instance for `Class`:
 
 {% highlight haskell %}
-{-# LANGUAGE ImpredicativeTypes #-}
-
-newtype Id a = Id a
-
-twoEmpty :: Class (Id (forall a. Monoid (m a))) => (m b, m c)
-twoEmpty = let Id x = inst in (_empty x, _empty x)
+instance Class (Q c t) => Class (c (t a)) where
+    inst = unQ inst
 {% endhighlight %}
 
-Doesn't work either. It seems that Haskell doesn't allow quantifiers in constraints, _period_.
-
-Alright, let's try a `newtype`:
+Now it's possible to use `empty` directly, instead of nested calls to `unQ`:
 
 {% highlight haskell %}
-type Monoid1 m = Class (Monoid1' m)
+empty2 :: Class (Q Semigroup' t) => (t a, t b)
+empty2 = (empty, empty)
 
-newtype Monoid1' m = Monoid1' (forall a. Monoid' (m a))
+higherEmpty :: Class (Q (Q Semigroup') t) => (t a b, t b a)
+higherEmpty = (empty, empty)
+{% endhighlight haskell %}
 
-twoEmpty :: Monoid1 m => (m a, m b)
-twoEmpty = let Monoid1 x = inst in (_empty x, _empty y)
-{% endhighlight %}
-
-Success! We can have an instance of Monoid1 imply an instance of Monoid:
-
-{% highlight haskell %}
-instance Monoid1 m => Class (Monoid' (m a)) where
-    inst = let Monoid1 x = inst in x
-{% endhighlight %}
-
-Now we can do things like this:
-
-{% highlight haskell %}
-twoEmpty :: Monoid1 m => (m a, m b)
-twoEmpty = (empty, empty) -- Monoid1 m => Monoid (m a), Monoid (m b)
-{% endhighlight %}
-
-To generalize a bit:
-
-{% highlight haskell %}
-{-# LANGUAGE UndecidableInstances #-}
-
-type Lift1 c m = Class (Lift1' c m)
-type Lift2 c m = Class (Lift2' c m)
-type Lift3 c m = Class (Lift3' c m)
--- etc.
-
-newtype Lift1' c m = Lift1' { unLift1 :: forall a. c (m a) }
-newtype Lift2' c m = Lift2' { unLift2 :: forall a. Lift1' c (m a) }
-newtype Lift3' c m = Lift3' { unLift3 :: forall a. Lift2' c (m a) }
--- etc.
-
-instance Lift1 c m => Class (c (m a)) where
-    inst = unLift1 inst
-instance Lift2 c m => Class (Lift1' c (m a)) where
-    inst = unLift2 inst
-instance Lift3 c m => Class (Lift2' c (m a)) where
-    inst = unLift3 inst
--- etc.
-{% endhighlight %}
-
-Example:
-
-{% highlight haskell %}
--- An instance. It requires a little syntactic overhead (an few extra Lift1's).
-instance Class (Lift1' Monoid' []) where
-    inst = Lift1' (Monoid' empty' append')
-      where
-        empty' = []
-        append' [] ys = ys
-        append' (x:xs) ys = x : append' xs ys
-
-twoEmpty :: Lift1 Monoid' m => (m a, m b)
-twoEmpty = (empty, empty)
-{% endhighlight %}
+Just watch out for overlapping instances.
 
 Conclusion
 ----------
 
-I think there's more to explore. In particular, I'm concerned about the safety of this method. Am I breaking the the system in a bad way? Another thing to consider is whether or not all the boilerplate can be automated with metaprogramming.
-
-My 'solution' to quantified contexts is not exactly ideal. It's unlikely that you'll ever need more than 2-3 levels of `LiftN`, but it would be nice to have a more general solution. Which I have. But it's complicated enough to warrant another post.
+I think there's more to explore. In particular, I'm concerned about the safety of this method. Am I breaking the the system in a bad way? Another thing to consider is whether or not all the boilerplate can be automated with metaprogramming. Guess I finally have a reason to learn Template Haskell :)
 
 [hsfci]: http://joyoftypes.blogspot.ca/2012/02/haskell-supports-first-class-instances.html
 [sctc]: http://www.haskellforall.com/2012/05/scrap-your-type-classes.html
