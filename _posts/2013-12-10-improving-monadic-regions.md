@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Improving Monadic Regions"
-categories: [haskell, programming, regions]
+categories: [haskell, functional programming, regions]
 published: true
 ---
 

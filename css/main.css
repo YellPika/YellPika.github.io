@@ -1,9 +1,19 @@
 @import url(code.css);
 @import url(reset.css);
 
-body { 
+body {
     background-color: whitesmoke;
     font-family: Arial, sans-serif;
+}
+
+sup {
+    font-size:xx-small;
+    vertical-align:top;
+}
+
+sub {
+    font-size:xx-small;
+    vertical-align:bottom;
 }
 
 code, pre {
@@ -11,7 +21,7 @@ code, pre {
     font-size: 14px;
 }
 
-a { 
+a {
     color: darkblue;
     text-decoration: none
 }

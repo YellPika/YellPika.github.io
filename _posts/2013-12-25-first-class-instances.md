@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "First Class Instances"
-categories: [haskell, programming, typeclasses]
+categories: [haskell, functional programming, typeclasses]
 ---
 
 In this post I'm going to implement first class instances for typeclasses. Yes, it's [already been done][hsfci], but I find that particular approach problematic for two reasons:
