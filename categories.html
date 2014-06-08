@@ -26,7 +26,7 @@ comments: false
 
 {% for category in categories %}
     {% assign words = category | split: " " %}
-    <h3 id="{{ category }}">
+    <h3 id="{{ category | cgi_escape }}">
         {% for word in words %}
             {% if forloop.first %}
             {% else %}
