@@ -134,3 +134,33 @@ blockquote {
         right: 0;
     }
 }
+
+@media (max-width: 858px) {
+    html {
+        font-size: 100%;
+    }
+}
+
+@media (max-width: 780px) {
+    html {
+        font-size: 105%;
+    }
+}
+
+@media (max-width: 702px) {
+    html {
+        font-size: 110%;
+    }
+}
+
+@media (max-width: 724px) {
+    html {
+        font-size: 115%;
+    }
+}
+
+@media (max-width: 623px) {
+    html {
+        font-size: 120%;
+    }
+}
