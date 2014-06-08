@@ -11,7 +11,7 @@ comments: true
         {% else %}
             |
         {% endif %}
-        <a href="/categories.html#{{ category }}">{{ category }}</a>
+        <a href="/categories.html#{{ category | cgi_escape }}">{{ category }}</a>
     {% endfor %}
     <br />
     <a href="{{ page.url }}#disqus_thread">Comments</a>
