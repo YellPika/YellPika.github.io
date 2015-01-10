@@ -2,5 +2,5 @@ name: "Giant Flying Lambdas!"
 url: http://yellPika.github.io
 description: "Design and exploration of programming languages, among other things..."
 markdown: redcarpet
-pygments: true
+highlighter: pygments
 future: false
